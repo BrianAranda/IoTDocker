@@ -1,0 +1,12 @@
+services:
+  clientemqtt:
+      build: ./clienteMqtt
+      image: clientemqtt
+      container_name: clientemqtt
+      environment:
+        - TZ=America/Argentina/Buenos_Aires
+        - SERVIDOR=${SERVIDOR}
+        - TOPICO_SUB1=${TOPICO_SUB1}
+        - TOPICO_SUB2=${TOPICO_SUB2}
+        - TOPICO_PUB=${TOPICO_PUB}
+      restart: unless-stopped
