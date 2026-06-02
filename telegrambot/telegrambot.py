@@ -107,7 +107,7 @@ async def enviar_orden_mqtt(comando, valor):
     servidor = os.environ["SERVIDOR"]
     usuario = os.environ["MQTT_USR"]
     password = os.environ["MQTT_PASS"]
-    puerto = os.environ["PUERTO_MQTTS"]
+    puerto = int(os.environ["PUERTO_MQTTS"])
     
     topico_ordenes = os.environ.get("TOPICO_PUB", "iot/termostato/comandos")
 
