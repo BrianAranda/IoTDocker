@@ -95,35 +95,25 @@ async def graficos(update: Update, context):
 
 async def enviar_orden_mqtt(comando, valor):
     """
-    Se conecta a Mosquitto y publica una orden para la Raspberry.
-    Recibe el 'comando' (ej. setpoint, rele) y el 'valor' (ej. 25, on).
+    Se conecta a Mosquitto de forma INTERNA y publica una orden para la Raspberry.
     """
-    
-    tls_context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
-    tls_context.verify_mode = ssl.CERT_REQUIRED
-    tls_context.check_hostname = True
-    tls_context.load_default_certs()
 
-    servidor = os.environ["SERVIDOR"]
     usuario = os.environ["MQTT_USR"]
     password = os.environ["MQTT_PASS"]
-    puerto = int(os.environ["PUERTO_MQTTS"])
-    
     topico_ordenes = os.environ.get("TOPICO_PUB", "iot/termostato/comandos")
 
     try:
         async with aiomqtt.Client(
-            hostname=servidor,
-            port=puerto,
+            hostname="mosquitto", 
+            port=1883,
             username=usuario,
-            password=password,
-            tls_context=tls_context
+            password=password
         ) as client:
             payload = f"{comando}:{valor}"
             await client.publish(topico_ordenes, payload=payload)
-            logging.info(f"Orden MQTT enviada con éxito: {payload}")
+            logging.info(f"Orden MQTT enviada con éxito (Vía Interna): {payload}")
             return True
-
+            
     except Exception as e:
         logging.error(f"Error al enviar orden MQTT: {e}")
         return False
