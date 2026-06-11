@@ -25,7 +25,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(update.message.chat.id, text="Bienvenido al Bot "+ nombre + " " + apellido,reply_markup=ReplyKeyboardMarkup(kb))
 
 async def about(update: Update, context):
-    await context.bot.send_message(update.message.chat.id, text="Este bot fue creado para el curso de IoT FIO")
+    await context.bot.send_message(
+        update.message.chat.id,
+        text="Este bot esta configurado para el ejercicio de Telegram Bot"
+    )
 
 async def kill(update: Update, context):
     logging.info(context.args)
@@ -95,7 +98,7 @@ async def graficos(update: Update, context):
 
 async def enviar_orden_mqtt(comando, valor):
     """
-    Se conecta a Mosquitto de forma INTERNA y publica una orden para la Raspberry.
+    Se conecta a Mosquitto de forma interna y publica una orden para la Raspberry.
     """
 
     usuario = os.environ["MQTT_USR"]
@@ -111,7 +114,7 @@ async def enviar_orden_mqtt(comando, valor):
         ) as client:
             payload = f"{comando}:{valor}"
             await client.publish(topico_ordenes, payload=payload)
-            logging.info(f"Orden MQTT enviada con éxito (Vía Interna): {payload}")
+            logging.info(f"Orden MQTT enviada con éxito: {payload}")
             return True
             
     except Exception as e:
@@ -146,13 +149,16 @@ async def comando_rele(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def comando_modo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if context.args:
         valor = context.args[0]
-        exito = await enviar_orden_mqtt("modo", valor)
-        if exito:
-            await update.message.reply_text(f"Orden enviada: Modo cambiado a {valor}")
+        if valor in ['manual','automatico']:
+            exito = await enviar_orden_mqtt("modo", valor)
+            if exito:
+                await update.message.reply_text(f"Orden enviada: Modo cambiado a {valor}")
+            else:
+                await update.message.reply_text("Error de red al intentar enviar la orden.")
         else:
-            await update.message.reply_text("Error de red al intentar enviar la orden.")
+             await update.message.reply_text("El valor del relé modo ser 'manual' o 'automatico'.")
     else:
-        await update.message.reply_text("Uso correcto: /modo <valor>")
+        await update.message.reply_text("Uso correcto: /modo <manual/automatico>")
 
 async def comando_periodo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if context.args:
