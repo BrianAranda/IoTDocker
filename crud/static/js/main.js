@@ -1,5 +1,3 @@
-
-// Selector de tema claro/oscuro (persiste en localStorage, claro por defecto)
 function aplicarTema(tema) {
   document.documentElement.setAttribute('data-bs-theme', tema);
   localStorage.setItem('tema', tema);
