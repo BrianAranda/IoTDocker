@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="row justify-content-center pt-4">
+  <div class="col-md-8 text-center">
+    <h2 class="mb-4">¿Qué querés hacer?</h2>
+  </div>
+</div>
+<div class="row justify-content-center g-4">
+  <div class="col-md-4">
+    <div class="card card-body text-center h-100">
+      <h4 class="card-title">Agenda</h4>
+      <p class="card-text">Gestionar contactos: crear, editar y borrar registros.</p>
+      <a href="{{url_for('agenda')}}" class="btn btn-primary mt-auto">Ir a la agenda</a>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card card-body text-center h-100">
+      <h4 class="card-title">Comandos</h4>
+      <p class="card-text">Enviar órdenes (setpoint / destello) a los nodos Pico por MQTTS.</p>
+      <a href="{{url_for('comandos')}}" class="btn btn-primary mt-auto">Ir a comandos</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,115 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="row">
+  <div class="col-md-7 mx-auto">
+    <div class="card card-body">
+      <legend>Enviar comando a un nodo</legend>
+
+      {% if nodos %}
+      <form action="{{url_for('enviar_comando')}}" method="POST">
+        <label class="col-form-label mt-2">Nodo destinatario</label>
+        <div class="mb-3">
+          {% for nodo in nodos %}
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="sensor_id"
+                   id="nodo{{nodo.0}}" value="{{nodo.1}}" {% if loop.first %}checked{% endif %}>
+            <label class="form-check-label" for="nodo{{nodo.0}}">
+              {{nodo.3 or nodo.1}} <small class="text-muted">({{nodo.1}})</small>
+            </label>
+          </div>
+          {% endfor %}
+        </div>
+
+        <div class="row g-3 align-items-end">
+          <div class="col-auto">
+            <label class="col-form-label" for="setpoint">Setpoint (ºC)</label>
+            <input type="number" class="form-control" id="setpoint" name="valor_setpoint" value="24">
+          </div>
+          <div class="col-auto">
+            <button type="submit" name="comando" value="setpoint" class="btn btn-primary">
+              Enviar setpoint
+            </button>
+          </div>
+        </div>
+
+        <div class="row g-3 align-items-end mt-1">
+          <div class="col-auto">
+            <label class="col-form-label" for="destello">Destello</label>
+            <select class="form-select" id="destello" name="valor_destello">
+              <option value="on">on</option>
+              <option value="off">off</option>
+            </select>
+          </div>
+          <div class="col-auto">
+            <button type="submit" name="comando" value="destello" class="btn btn-warning">
+              Enviar destello
+            </button>
+          </div>
+        </div>
+      </form>
+      {% else %}
+      <p class="text-muted mb-0">No hay nodos cargados todavía. Agregá uno más abajo.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="row pt-4">
+  <div class="col-md-7 mx-auto">
+    <table class="table table-hover table-default">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">sensor_id</th>
+          <th scope="col">MAC</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Tópico</th>
+          <th scope="col">acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for nodo in nodos %}
+        <tr>
+          <td>{{nodo.0}}</td>
+          <td>{{nodo.1}}</td>
+          <td>{{nodo.2}}</td>
+          <td>{{nodo.3}}</td>
+          <td>{{nodo.4}}</td>
+          <td>
+            <a href="{{url_for('borrar_nodo',id=nodo.0)}}" class="btn btn-danger btn-borrar">borrar</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="row pt-2 pb-5">
+  <div class="col-md-7 mx-auto">
+    <div class="card card-body">
+      <form action="{{url_for('agregar_nodo')}}" method="POST">
+        <legend>Agregar nodo</legend>
+        <div class="form-group">
+          <label class="col-form-label mt-2" for="sensor_id">sensor_id</label>
+          <input type="text" class="form-control" id="sensor_id" name="sensor_id" required>
+        </div>
+        <div class="form-group">
+          <label class="col-form-label mt-2" for="mac">MAC</label>
+          <input type="text" class="form-control" id="mac" name="mac">
+        </div>
+        <div class="form-group">
+          <label class="col-form-label mt-2" for="nombre">Nombre</label>
+          <input type="text" class="form-control" id="nombre" name="nombre">
+        </div>
+        <div class="form-group">
+          <label class="col-form-label mt-2" for="topico">Tópico de comandos</label>
+          <input type="text" class="form-control" id="topico" name="topico"
+                 placeholder="iot/sensor_1/comandos" required>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">guardar nodo</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
