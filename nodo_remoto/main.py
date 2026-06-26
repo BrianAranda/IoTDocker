@@ -32,7 +32,7 @@ PUERTO_MQTTS = int(os.environ["PUERTO_MQTTS"])
 MQTT_USR = os.environ["MQTT_USR"]
 MQTT_PASS = os.environ["MQTT_PASS"]
 
-TOPICO_COMANDO = "led"          # switch del dashboard -> nodo remoto
+TOPICO_COMANDO = "led/orden"    # switch del dashboard -> nodo remoto
 TOPICO_ESTADO = "led/estado"    # nodo remoto -> indicador luminoso
 TOPICO_SENSOR = "nodered"       # lecturas de temp/humedad
 
